@@ -12,18 +12,24 @@
     <div style="margin: 50px;" class="ui container">
 
         <h1 style="margin-top: 100px;" class="ui center aligned header">Todo App</h1>
+        <div> 
+            <a class="ui teal button" href="/">Home</a>
+            <a class="ui violet button" href="/Analytics">Analytics</a>
+        </div>
         <form class="ui form" action="/add" method="post">
             <div class="field">
                 <label for="title">Todo Title</label>
                 <input type="text" name="title" placeholder="Enter here">
                 <br>
                 <button class="ui blue button" type="submit">Add</button>
+                <input type="date" id="due" name="due_date" value="2023-07-22" min="2023-01-01" max="2030-12-31" />
             </div>
         </form>
 
         {% for todo in todo_list %}
             <div class="ui segment">
                 <p class="ui big header">{{todo.title}}</p>
+                <p class="ui big header">Due: {{todo.due_date.strftime('%Y-%m-%d')}}</p>
 
                 {% if todo.complete == False %}
                     <span class="ui grey label">Not completed</span>

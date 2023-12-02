@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
@@ -10,6 +12,7 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     complete = db.Column(db.Boolean)
+    due_date = db.Column(db.DateTime)
 
 # -----------------------------------------
 #               UI Pages
@@ -21,10 +24,10 @@ def index():
     todo_list = Todo.query.all()
     return render_template('base.html', todo_list=todo_list)
 
-# @app.route('/data')
-# def index():
-#     todo_list = Todo.query.all()
-#     return render_template('base.html', todo_list=todo_list)
+@app.route('/Analytics')
+def analytics():
+    todo_list = Todo.query.all()
+    return render_template('analytics.html', todo_list=todo_list)
 
 
 
@@ -35,7 +38,13 @@ def index():
 def add():
     # add new todo
     todo_title = request.form.get("title")
-    new_todo = Todo(title=todo_title, complete=False)
+    todo_due_date = request.form.get("due_date")
+    
+    if todo_title is None or not todo_title.strip():
+        # Handle the case where todo_title is empty
+        return redirect(url_for("index"))
+    
+    new_todo = Todo(title=todo_title, complete=False, due_date=todo_due_date)
     db.session.add(new_todo)
     db.session.commit()
     return redirect(url_for("index"))

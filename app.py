@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-
+import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
@@ -48,7 +48,10 @@ def add():
         # Handle the case where todo_title is empty
         return redirect(url_for("index"))
     
-    new_todo = Todo(title=todo_title, complete=False, due_date=todo_due_date)
+    temp = todo_due_date.split("-")
+    x = datetime.datetime(int(temp[0]), int(temp[1]), int(temp[2]))
+
+    new_todo = Todo(title=todo_title, complete=False, due_date=x)
     db.session.add(new_todo)
     db.session.commit()
     return redirect(url_for("index"))

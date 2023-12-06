@@ -43,6 +43,10 @@ def add():
     if todo_title is None or not todo_title.strip():
         # Handle the case where todo_title is empty
         return redirect(url_for("index"))
+
+    if todo_due_date is None or not todo_due_date.strip():
+        # Handle the case where todo_title is empty
+        return redirect(url_for("index"))
     
     new_todo = Todo(title=todo_title, complete=False, due_date=todo_due_date)
     db.session.add(new_todo)

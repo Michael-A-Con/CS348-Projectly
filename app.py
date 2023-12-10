@@ -26,8 +26,8 @@ def index():
 
 @app.route('/Analytics')
 def analytics():
-    todo_list = Todo.query.all()
-    return render_template('analytics.html', todo_list=todo_list)
+    tasks = Todo.query.all()
+    return render_template('analytics.html', tasks=tasks)
 
 
 
@@ -71,6 +71,17 @@ def delete(todo_id):
     db.session.delete(todo)
     db.session.commit()
     return redirect(url_for("index"))
+
+@app.route('/sort/<column>')
+def sort_tasks(column):
+    valid_columns = ['id', 'title', 'due_date', 'complete']
+    
+    if column not in valid_columns:
+        return 'Invalid column for sorting'
+    
+    tasks = Todo.query.order_by(getattr(Todo, column)).all()
+    return render_template('analytics.html', tasks=tasks)
+
 
 if __name__ == "__main__":
     with app.app_context():

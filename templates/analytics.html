@@ -12,15 +12,35 @@
     </head>
     <body>
         <div style="margin: 50px;" class="ui container">
-            <h1 style="margin-top: 100px;" class="ui center aligned header">Todo App</h1>
-            <div> 
-                <a class="ui teal button" href="/">Home</a>
-                <a class="ui violet button" href="/Analytics">Analytics</a>
+
+            <div style="margin: 50px;" class="ui container">
+                <h1 style="margin-top: 100px;" class="ui center aligned header">Todo App</h1>
+                <div> 
+                    <a class="ui teal button" href="/">Home</a>
+                    <a class="ui violet button" href="/Analytics">Analytics</a>
+                </div>
             </div>
-        </div>
 
-
-        
-        <script src="" async defer></script>
+            <table class="ui celled table">
+                <thead>
+                    <tr>
+                        <th><a href="{{ url_for('sort_tasks', column='id') }}">ID</a></th>
+                        <th><a href="{{ url_for('sort_tasks', column='title') }}">Title</a></th>
+                        <th><a href="{{ url_for('sort_tasks', column='due_date') }}">Due Date</a></th>
+                        <th><a href="{{ url_for('sort_tasks', column='complete') }}">Complete</a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                        <tr>
+                            <td>{{ task.id }}</td>
+                            <td>{{ task.title }}</td>
+                            <td>{{ task.due_date.strftime('%Y-%m-%d') if task.due_date else 'N/A' }}</td>
+                            <td>{{ 'Yes' if task.complete else 'No' }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    </div>
     </body>
 </html>

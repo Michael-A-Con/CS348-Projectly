@@ -16,20 +16,35 @@
             <a class="ui teal button" href="/">Home</a>
             <a class="ui violet button" href="/Analytics">Analytics</a>
         </div>
+
+        
         <form class="ui form" action="/add" method="post">
             <div class="field">
-                <label for="title">Todo Title</label>
-                <input type="text" name="title" placeholder="Enter here">
                 <br>
-                <button class="ui blue button" type="submit">Add</button>
-                <input type="date" id="due" name="due_date" min="2023-01-01" max="2030-12-31" />
+                <input type="text" name="title" placeholder="Title">
+                <br>
+                <div class="ui grid">
+                    <div class="three wide column">
+                        <button class="ui blue button" type="submit">Add</button>
+                    </div>
+                    <div class="three wide column">
+                        <input type="date" id="due" name="due_date" min="2023-01-01" max="2030-12-31" />
+                    </div>
+                </div>
             </div>
         </form>
 
         {% for todo in todo_list %}
             <div class="ui segment">
-                <p class="ui big header">{{todo.title}}</p>
-                <p class="ui big header">Due: {{todo.due_date.strftime('%Y-%m-%d')}}</p>
+                <div class="ui grid">
+                    <div class="twelve wide left floated column">
+                        <p class="ui big header">{{todo.title}}</p>
+                    </div>
+                    
+                    <div class="three wide right floated column">
+                        <p class="ui big header">Due: {{todo.due_date.strftime('%Y-%m-%d')}}</p>
+                    </div>
+                </div>
 
                 {% if todo.complete == False %}
                     <span class="ui grey label">Not completed</span>

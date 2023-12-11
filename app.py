@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-import datetime
+from datetime import datetime 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
@@ -82,6 +82,26 @@ def sort_tasks(column):
     tasks = Todo.query.order_by(getattr(Todo, column)).all()
     return render_template('analytics.html', tasks=tasks)
 
+@app.route('/search', methods=['POST'])
+def search_tasks():
+    title = request.form.get('title')
+    due_date = request.form.get('due_date')
+    completed = request.form.get('completed')
+
+    filters = {}
+
+    if title:
+        filters['title'] = title
+
+    if due_date:
+        filters['due_date'] = datetime.strptime(due_date, '%Y-%m-%d')
+        
+    if completed:
+        filters['complete'] = completed.lower() == 'true'
+
+    tasks = Todo.query.filter_by(**filters).all()
+    
+    return render_template('analytics.html', tasks=tasks)
 
 if __name__ == "__main__":
     with app.app_context():

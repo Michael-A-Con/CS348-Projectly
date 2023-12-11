@@ -21,26 +21,44 @@
                 </div>
             </div>
 
-            <table class="ui celled table">
-                <thead>
+                    <!-- Search Form -->
+        <form action="{{ url_for('search_tasks') }}" method="post">
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title">
+
+            <label for="due_date">Due Date:</label>
+            <input type="text" name="due_date" id="due_date" placeholder="YYYY-MM-DD">
+
+            <label for="completed">Completed:</label>
+            <select name="completed" id="completed">
+                <option value="">-- Any --</option>
+                <option value="True">Yes</option>
+                <option value="False">No</option>
+            </select>
+
+            <button type="submit">Search</button>
+        </form>
+
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th><a href="{{ url_for('sort_tasks', column='id') }}">ID</a></th>
+                    <th><a href="{{ url_for('sort_tasks', column='title') }}">Title</a></th>
+                    <th><a href="{{ url_for('sort_tasks', column='due_date') }}">Due Date</a></th>
+                    <th><a href="{{ url_for('sort_tasks', column='complete') }}">Complete</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
                     <tr>
-                        <th><a href="{{ url_for('sort_tasks', column='id') }}">ID</a></th>
-                        <th><a href="{{ url_for('sort_tasks', column='title') }}">Title</a></th>
-                        <th><a href="{{ url_for('sort_tasks', column='due_date') }}">Due Date</a></th>
-                        <th><a href="{{ url_for('sort_tasks', column='complete') }}">Complete</a></th>
+                        <td>{{ task.id }}</td>
+                        <td>{{ task.title }}</td>
+                        <td>{{ task.due_date.strftime('%Y-%m-%d') if task.due_date else 'N/A' }}</td>
+                        <td>{{ 'Yes' if task.complete else 'No' }}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for task in tasks %}
-                        <tr>
-                            <td>{{ task.id }}</td>
-                            <td>{{ task.title }}</td>
-                            <td>{{ task.due_date.strftime('%Y-%m-%d') if task.due_date else 'N/A' }}</td>
-                            <td>{{ 'Yes' if task.complete else 'No' }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
     </body>
 </html>

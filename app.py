@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from datetime import datetime 
+import datetime as dt
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
@@ -10,7 +10,7 @@ db = SQLAlchemy(app)
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100))
+    title = db.Column(db.String(100), index=True)
     complete = db.Column(db.Boolean)
     due_date = db.Column(db.DateTime)
 
@@ -49,7 +49,7 @@ def add():
         return redirect(url_for("index"))
     
     temp = todo_due_date.split("-")
-    x = datetime.datetime(int(temp[0]), int(temp[1]), int(temp[2]))
+    x = dt.datetime(int(temp[0]), int(temp[1]), int(temp[2]))
 
     new_todo = Todo(title=todo_title, complete=False, due_date=x)
     db.session.add(new_todo)
